@@ -1,0 +1,16 @@
+name: NGVKseller
+version: '${version}'
+main: ua.nagivka.nNGVKseller.NGVKseller
+api-version: '1.21'
+commands:
+  seller:
+    description: Основная команда скупщика
+    permission: ngvkseller.use
+    aliases: [shop, sell]
+permissions:
+  ngvkseller.use:
+    default: true
+  ngvkseller.admin:
+    default: op
+depend: [Vault]
+softdepend: [PlaceholderAPI]

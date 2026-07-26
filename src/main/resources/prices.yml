@@ -1,0 +1,14 @@
+# Можно задавать как простой числовой ценник, так и расширенный объект
+prices:
+  DIAMOND:
+    price: 150.0
+    min-price: 50.0
+    max-price: 300.0
+    custom-model-data: 0
+  GOLD_INGOT:
+    price: 75.0
+    min-price: 25.0
+    max-price: 150.0
+  IRON_INGOT: 30.0
+  COAL: 10.0
+  DIRT: 0.5

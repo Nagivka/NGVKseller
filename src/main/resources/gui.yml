@@ -1,0 +1,79 @@
+# Доступные действия (action):
+# SELL - продать конкретный предмет из 'item-type'
+# SELL_ALL - продать абсолютно все подходящие ресурсы из инвентаря
+# STATS - показать личную статистику продаж
+# NEXT_PAGE / PREV_PAGE - навигация
+# NONE - декоративный элемент
+
+pages:
+  1:
+    title: "#e8d399Скупщик | Главное меню"
+    size: 54
+    filler:
+      enabled: true
+      material: "GRAY_STAINED_GLASS_PANE"
+      name: " "
+    items:
+      10:
+        material: DIAMOND
+        name: "#e8d399Продать Алмазы"
+        lore:
+          - "#7f8c8dБазовая цена: #2ecc71$150 / шт."
+          - "#7f8c8dТекущий курс: #e8d399%rate%%"
+          - ""
+          - "#7f8c8dНажмите, чтобы продать все алмазы"
+        action: "SELL"
+        item-type: "DIAMOND"
+      12:
+        material: GOLD_INGOT
+        name: "#e8d399Продать Золотые Слитки"
+        lore:
+          - "#7f8c8dБазовая цена: #2ecc71$75 / шт."
+          - "#7f8c8dТекущий курс: #e8d399%rate%%"
+          - ""
+          - "#7f8c8dНажмите, чтобы продать всё золото"
+        action: "SELL"
+        item-type: "GOLD_INGOT"
+      48:
+        material: BOOK
+        name: "#e8d399Ваша статистика"
+        lore:
+          - "#7f8c8dПродано сегодня: #2ecc71$%today% / $%max%"
+          - "#7f8c8dВсего заработано: #2ecc71$%total%"
+        action: "STATS"
+      49:
+        material: CHEST
+        name: "#2ecc71ПРОДАТЬ ВСЁ"
+        lore:
+          - "#7f8c8dНажмите, чтобы продать все ресурсы"
+          - "#7f8c8dиз вашего инвентаря сразу!"
+        action: "SELL_ALL"
+      53:
+        material: ARROW
+        name: "#e8d399Вперед ->"
+        lore:
+          - "#7f8c8dПерейти на страницу 2"
+        action: "NEXT_PAGE"
+  2:
+    title: "#e8d399Скупщик | Страница 2"
+    size: 54
+    filler:
+      enabled: true
+      material: "GRAY_STAINED_GLASS_PANE"
+      name: " "
+    items:
+      10:
+        material: IRON_INGOT
+        name: "#e8d399Продать Железные Слитки"
+        lore:
+          - "#7f8c8dЦена: #2ecc71$30 / шт."
+          - ""
+          - "#7f8c8dНажмите, чтобы продать всё железо"
+        action: "SELL"
+        item-type: "IRON_INGOT"
+      45:
+        material: ARROW
+        name: "#e8d399<- Назад"
+        lore:
+          - "#7f8c8dВернуться на страницу 1"
+        action: "PREV_PAGE"
