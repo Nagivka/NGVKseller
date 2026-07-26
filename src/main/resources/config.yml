@@ -2,7 +2,7 @@ settings:
   # Настройки дневного лимита продаж
   daily-limits:
     enabled: true
-    default-max-amount: 50000.0 # Лимит заработка в день по умолчанию (&fƜ)
+    default-max-amount: 50000.0 # Лимит заработка в день по умолчанию ($)
     reset-hour: 0 # Час автосброса лимита в сутки (от 0 до 23)
 
   # Настройки персональной динамической экономики
@@ -27,11 +27,11 @@ settings:
 messages:
   no-permission: "#ff5555У вас нет прав для выполнения этой команды!"
   only-players: "#ff5555Эту команду могут использовать только игроки."
-  sold-items: "#2ecc71Вы успешно продали #e8d399%amount% шт. %item% #2ecc71на сумму #e8d399&fƜ%price%!"
+  sold-items: "#2ecc71Вы успешно продали #e8d399%amount% шт. %item% #2ecc71на сумму #e8d399$%price%!"
   nothing-to-sell: "#ff5555У вас нет подходящих предметов для продажи!"
-  limit-reached: "#ff5555Вы достигли дневного лимита продаж! Лимит: #e8d399&fƜ%limit% / &fƜ%max_limit%"
-  limit-partially-reached: "#e67e22Продана только часть предметов на сумму #e8d399&fƜ%price%#e67e22 (достигнут дневной лимит)!"
+  limit-reached: "#ff5555Вы достигли дневного лимита продаж! Лимит: #e8d399$%limit% / $%max_limit%"
+  limit-partially-reached: "#e67e22Продана только часть предметов на сумму #e8d399$%price%#e67e22 (достигнут дневной лимит)!"
   limit-reset-player: "#2ecc71Дневной лимит для игрока #e8d399%player% #2ecc71успешно сброшен."
   reload: "#2ecc71Конфигурация плагина успешно перезагружена."
-  stats-info: "#e8d399Статистика %player%: #2ecc71Заработано сегодня: &fƜ%today% / &fƜ%max% | Всего: &fƜ%total%"
+  stats-info: "#e8d399Статистика %player%: #2ecc71Заработано сегодня: $%today% / $%max% | Всего: $%total%"
   invalid-player: "#ff5555Игрок не найден!"

@@ -61,7 +61,7 @@ public class SellerCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ColorUtil.format("#E8D8C8--- ТОП-10 ТОРГОВЦЕВ СЕРВЕРА ---"));
                     for (int i = 0; i < top.size(); i++) {
                         DataManager.TopEntry entry = top.get(i);
-                        String line = String.format("#9AA8B6%d. #F4E2D8%s #9AA8B6— #B4E197&fƜ%.2f", (i + 1), entry.name(), entry.total());
+                        String line = String.format("#9AA8B6%d. #F4E2D8%s #9AA8B6— #B4E197$%.2f", (i + 1), entry.name(), entry.total());
                         sender.sendMessage(ColorUtil.format(line));
                     }
                     return true;

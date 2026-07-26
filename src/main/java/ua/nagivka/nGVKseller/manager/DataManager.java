@@ -8,6 +8,7 @@ import ua.nagivka.nNGVKseller.NGVKseller;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,18 +38,36 @@ public class DataManager {
         }
         dataConfig = YamlConfiguration.loadConfiguration(file);
 
+        String lastResetDate = dataConfig.getString("last-daily-reset-date", "");
+        String currentDate = LocalDate.now().toString();
+
+        boolean isNewDay = !currentDate.equals(lastResetDate);
+        if (isNewDay) {
+            dataConfig.set("last-daily-reset-date", currentDate);
+            todayEarnings.clear();
+        }
+
         ConfigurationSection sec = dataConfig.getConfigurationSection("players");
         if (sec != null) {
             for (String key : sec.getKeys(false)) {
                 try {
                     UUID uuid = UUID.fromString(key);
-                    todayEarnings.put(uuid, sec.getDouble(key + ".today", 0.0));
+                    if (isNewDay) {
+                        dataConfig.set("players." + key + ".today", 0.0);
+                        todayEarnings.put(uuid, 0.0);
+                    } else {
+                        todayEarnings.put(uuid, sec.getDouble(key + ".today", 0.0));
+                    }
                     totalEarnings.put(uuid, sec.getDouble(key + ".total", 0.0));
                     if (sec.contains(key + ".name")) {
                         playerNames.put(uuid, sec.getString(key + ".name"));
                     }
                 } catch (IllegalArgumentException ignored) {}
             }
+        }
+
+        if (isNewDay) {
+            saveData();
         }
     }
 
@@ -87,12 +106,34 @@ public class DataManager {
         }
     }
 
+    public void resetAllTodayEarnings() {
+        todayEarnings.clear();
+        ConfigurationSection sec = dataConfig.getConfigurationSection("players");
+        if (sec != null) {
+            for (String key : sec.getKeys(false)) {
+                dataConfig.set("players." + key + ".today", 0.0);
+            }
+        }
+    }
+
+    public String getLastResetDate() {
+        return dataConfig != null ? dataConfig.getString("last-daily-reset-date", "") : "";
+    }
+
+    public void setLastResetDate(String date) {
+        if (dataConfig != null) {
+            dataConfig.set("last-daily-reset-date", date);
+        }
+    }
+
     public long getLastResetTime() {
-        return dataConfig.getLong("last-reset-time", 0L);
+        return dataConfig != null ? dataConfig.getLong("last-reset-time", 0L) : 0L;
     }
 
     public void setLastResetTime(long time) {
-        dataConfig.set("last-reset-time", time);
+        if (dataConfig != null) {
+            dataConfig.set("last-reset-time", time);
+        }
     }
 
     public Map<Material, Double> getPlayerMultipliers(UUID uuid) {

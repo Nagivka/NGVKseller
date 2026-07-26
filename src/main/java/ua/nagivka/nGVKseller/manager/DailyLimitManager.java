@@ -3,7 +3,7 @@ package ua.nagivka.nNGVKseller.manager;
 import org.bukkit.entity.Player;
 import ua.nagivka.nNGVKseller.NGVKseller;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 public class DailyLimitManager {
     private final NGVKseller plugin;
@@ -13,16 +13,14 @@ public class DailyLimitManager {
         checkAndResetLimits();
     }
 
-    public void checkAndResetLimits() {
-        long lastReset = plugin.getDataManager().getLastResetTime();
-        Calendar now = Calendar.getInstance();
-        Calendar last = Calendar.getInstance();
-        last.setTimeInMillis(lastReset);
+    public synchronized void checkAndResetLimits() {
+        String lastResetDate = plugin.getDataManager().getLastResetDate();
+        String currentDate = LocalDate.now().toString();
 
-        if (now.get(Calendar.DAY_OF_YEAR) != last.get(Calendar.DAY_OF_YEAR) ||
-                now.get(Calendar.YEAR) != last.get(Calendar.YEAR)) {
-
-            plugin.getDataManager().setLastResetTime(now.getTimeInMillis());
+        if (!currentDate.equals(lastResetDate)) {
+            plugin.getDataManager().resetAllTodayEarnings();
+            plugin.getDataManager().setLastResetDate(currentDate);
+            plugin.getDataManager().saveData();
         }
     }
 
@@ -43,10 +41,10 @@ public class DailyLimitManager {
     }
 
     public double getRemainingLimit(Player player) {
+        checkAndResetLimits();
         if (!plugin.getConfigManager().getConfig().getBoolean("settings.daily-limits.enabled", true)) {
             return Double.MAX_VALUE;
         }
-        checkAndResetLimits();
         double used = plugin.getDataManager().getPlayerTodayEarnings(player.getUniqueId());
         double max = getMaxLimit(player);
         return Math.max(0, max - used);

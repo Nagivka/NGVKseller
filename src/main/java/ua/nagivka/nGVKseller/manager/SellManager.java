@@ -9,6 +9,8 @@ import ua.nagivka.nNGVKseller.NGVKseller;
 import ua.nagivka.nNGVKseller.config.PriceData;
 import ua.nagivka.nNGVKseller.util.ColorUtil;
 
+import java.util.Locale;
+
 public class SellManager {
     private final NGVKseller plugin;
 
@@ -31,7 +33,23 @@ public class SellManager {
             return;
         }
 
-        processSell(player, item.getType(), item.getAmount(), true);
+        int amount = item.getAmount();
+        DynamicPriceManager.SaleResult result = plugin.getDynamicPriceManager().calculateSale(player, item.getType(), amount, true);
+
+        if (result.actualSoldAmount() <= 0) {
+            sendMessage(player, "limit-reached");
+            playSound(player, "sell-failure");
+            return;
+        }
+
+        if (result.actualSoldAmount() >= amount) {
+            player.getInventory().setItemInMainHand(null);
+        } else {
+            item.setAmount(amount - result.actualSoldAmount());
+            player.getInventory().setItemInMainHand(item);
+        }
+
+        executeTransaction(player, item.getType().name(), result.actualSoldAmount(), result.totalEarnings());
     }
 
     public void sellAll(Player player) {
@@ -130,16 +148,20 @@ public class SellManager {
     }
 
     private boolean matchesData(ItemStack stack, PriceData data) {
+        if (stack == null || stack.getType().isAir()) return false;
+
         if (data.customModelData() > 0) {
             if (!stack.hasItemMeta()) return false;
             ItemMeta meta = stack.getItemMeta();
-            return meta.hasCustomModelData() && meta.getCustomModelData() == data.customModelData();
+            return meta != null && meta.hasCustomModelData() && meta.getCustomModelData() == data.customModelData();
         }
 
         if (stack.hasItemMeta()) {
             ItemMeta meta = stack.getItemMeta();
-            if (meta.hasEnchants()) return false;
-            if (meta.hasDisplayName()) return false;
+            if (meta != null) {
+                if (meta.hasEnchants()) return false;
+                if (meta.hasDisplayName()) return false;
+            }
         }
         return true;
     }
@@ -154,7 +176,7 @@ public class SellManager {
         String soundName = plugin.getConfigManager().getConfig().getString("settings.sounds." + soundKey, "");
         if (!soundName.isEmpty()) {
             try {
-                player.playSound(player.getLocation(), Sound.valueOf(soundName), 1.0f, 1.0f);
+                player.playSound(player.getLocation(), Sound.valueOf(soundName.toUpperCase(Locale.ROOT)), 1.0f, 1.0f);
             } catch (Exception ignored) {}
         }
     }

@@ -48,6 +48,12 @@ public class NGVKseller extends JavaPlugin {
             }
         }, 6000L, 6000L);
 
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
+            if (dailyLimitManager != null) {
+                dailyLimitManager.checkAndResetLimits();
+            }
+        }, 1200L, 1200L);
+
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new NGVKsellerExpansion(this).register();
         }
